@@ -10,10 +10,11 @@ passport.serializeUser((user, done) => {
 	done(null, user.id);
 });
 
-passport.deserializeUser((userId, done) => {
-	User.findById(userId).then((user) => {
-		done(null, user);
-	});
+passport.deserializeUser(async (userId, done) => {
+	const user = await User.findById(userId);
+	if (user) {
+		return done(null, user);
+	}
 });
 
 passport.use(
@@ -21,19 +22,17 @@ passport.use(
 		{
 			clientID: keys.googleClientID,
 			clientSecret: keys.googleClientSecret,
-			//usar ternario dependiendo si es == dev o == prod, usar path absolutos, o modificar el proxy de heroku dejandolo como esta
-			callbackURL: "/auth/google/callback",
+			callbackURL: "/auth/google/callback", // can use relative path when proxy prop is set to true
 			proxy: true,
 		},
-		(accessToken, refreshToken, profile, done) => {
-			User.findOne({ googleId: profile.id }).then((existingUser) => {
-				if (existingUser) {
-					// usuario existe, no es necesario crear una nueva instancia del modelo User, llamamos al callback de passport done()
-					done(null, existingUser);
-				}
-				// usuario no existe: crear un nuevo registro y guardarlo en DB
-				new User({ googleId: profile.id }).save().then((newUser) => done(null, newUser));
-			});
+		async (accessToken, refreshToken, profile, done) => {
+			const existingUser = await User.findOne({ googleId: profile.id });
+			if (existingUser) {
+				// usuario existe, no es necesario crear una nueva instancia del modelo User, llamamos al callback de passport done()
+				return done(null, existingUser);
+			}
+			const newUser = await new User({ googleId: profile.id }).save();
+			done(null, newUser);
 		}
 	)
 );
