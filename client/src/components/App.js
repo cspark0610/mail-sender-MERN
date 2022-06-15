@@ -5,21 +5,8 @@ import * as actions from "../actions";
 // component imports
 import Header from "./Header";
 import Landing from "./Landing";
-
-const Dashboard = () => {
-	return (
-		<div>
-			<h1>Dashboard</h1>
-		</div>
-	);
-};
-const SurveyNew = () => {
-	return (
-		<div>
-			<h1>SurveyNew</h1>
-		</div>
-	);
-};
+import Dashboard from "./Dashboard";
+import SurveyNew from "./surveys/SurveyNew";
 
 class App extends Component {
 	// en el momento en que se monta el componente App quiero ejecutar la accion fetchUser

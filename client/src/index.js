@@ -7,6 +7,9 @@ import thunk from "redux-thunk";
 import reducers from "./reducers";
 // have to import css file with absolute path and clarifying file type
 import "materialize-css/dist/css/materialize.min.css";
+// to test send mailer in backend
+import axios from "axios";
+window.axios = axios;
 
 // create redux store
 const store = createStore(reducers, {}, applyMiddleware(thunk));

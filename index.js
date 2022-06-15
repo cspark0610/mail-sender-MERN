@@ -7,7 +7,14 @@ const passport = require("passport");
 const keys = require("./config/keys");
 //cambiar el orden del require debo requerir primero el modelo de mongoose antes de passport
 require("./models/User");
+require("./models/Survey");
 require("./services/passport");
+// to use it in node tereminal
+// mongoose.Promise = global.Promise;
+// mongoose.connect(keys.mongoURI, {
+// 	useNewUrlParser: true,
+// 	useUnifiedTopology: true,
+// });
 
 mongoose
 	.connect(keys.mongoURI, {
@@ -37,6 +44,7 @@ app.use(passport.session());
 // require all routes files modules
 require("./routes/authRoutes")(app);
 require("./routes/billingRoutes")(app);
+require("./routes/surveyRoutes")(app);
 
 // add routes handling validation in production mode
 if (process.env.NODE_ENV === "production") {

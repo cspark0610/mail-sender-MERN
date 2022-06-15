@@ -8,17 +8,9 @@ module.exports = function (app) {
 		})
 	);
 	app.use(
-		["/api/current_user"],
+		["/api/**"],
 		createProxyMiddleware({
-			target: "http://localhost:6000/api/current_user",
-		})
-	);
-	app.use(
-		["/api/stripe"],
-		createProxyMiddleware({
-			target: "http://localhost:6000/api/stripe",
+			target: "http://localhost:6000/api/**",
 		})
 	);
 };
-
-// hay q setear luego un proxy rule, en setupProxy.js para cada ruta del front
